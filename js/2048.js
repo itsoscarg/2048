@@ -225,3 +225,38 @@ if (points === 2048) {
   this.hasWon = true;
   }
 };
+
+
+Game2048.prototype.isGameLost = function () {
+  if (this._getAvailablePosition() !== null) {
+    return;
+  }
+
+  var theGame = this;
+
+  this.board.forEach(function (row, rowIndex) {
+      row.forEach(function (cell, colIndex) {
+        var current = that.board[rowIndex][colIndex];
+        var top, bottom, left, right;
+
+        if (that.board[rowIndex][colIndex - 1]) {
+          left = theGame.board[rowIndex][colIndex -1];
+        }
+
+        if (that.board[rowIndex][colIndex - 1]) {
+          left = theGame.board[rowIndex][colIndex -1];
+        }
+
+        if (that.board[rowIndex][colIndex - 1]) {
+          left = theGame.board[rowIndex][colIndex -1];
+        }
+
+        if (that.board[rowIndex][colIndex - 1]) {
+          left = theGame.board[rowIndex][colIndex -1];
+          if (current === top || current === bottom || current === left || current === right) {
+       theGame.hasLost = true;
+                        }
+                      }
+                      });
+                    });
+                  };
