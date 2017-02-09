@@ -14,25 +14,27 @@ function Game2048 () {
   this._generateTile();
 }
 
+
 Game2048.prototype._generateTile = function () {
   var tileValue;
 
-    if (Math.random() < 0.8) {
-      tileValue = 2;
-    } else {
-      tileValue = 4;
-    }
+  if (Math.random() < 0.8) {
+    tileValue = 2;
+  } else {
+    tileValue = 4;
+  }
 
-var emptyTile = this._getAvailiablePosition();
+  var emptyTile = this._getAvailablePosition();
 
-if (emptyTile !== null) {
-  var row = emptyTile.x;
-  var col = emptyTile.y;
+  if (emptyTile !== null) {
+    var row = emptyTile.x;
+    var col = emptyTile.y;
     this.board[row][col] = tileValue;
   }
 };
 
-Game2048.prototype._getAvailiablePosition = function (){
+
+Game2048.prototype._getAvailablePosition = function () {
   var emptyTiles = [];
 
   this.board.forEach(function (row, rowIndex) {
@@ -42,12 +44,15 @@ Game2048.prototype._getAvailiablePosition = function (){
       }
     });
   });
+
   if (emptyTiles.length === 0) {
     return null;
   }
+
   var randomIndex = Math.floor(Math.random() * emptyTiles.length);
   return emptyTiles[randomIndex];
 };
+
 
 Game2048.prototype._renderBoard = function () {
   this.board.forEach(function(row) {
@@ -55,36 +60,92 @@ Game2048.prototype._renderBoard = function () {
   });
 };
 
+
 Game2048.prototype.moveLeft = function () {
+  var updatedBoard = [];
+
   this.board.forEach(function (row) {
-    //1. Remove empties from row
+    // 1. Remove empties from row
     var newRow = [];
 
     row.forEach(function (cell) {
       if (cell !== null) {
-          newRow.push(cell);
+        newRow.push(cell);
       }
     });
-    //2. Merge tiles in row that are together and the same
+
+    // 2. Merge tiles in row that are together and the same number
     for (var i = 0; i < newRow.length; i += 1) {
       if (newRow[i] === newRow[i + 1]) {
         newRow[i] *= 2;
         newRow[i + 1] = null;
       }
     }
-    //3. Remove new empties in the middle
-    //    e.g. [8, 8, 4] -> [16, null, 4]
-    //        we want to end up with [16, 4]
+
+    // 3. Remove new empties in the middle
+    //     e.g. when step #2 turns [8, 8, 4] into [16, null, 4]
+    //          we want to end up with [16, 4]
     var moved = [];
 
     newRow.forEach(function (cell) {
       if (cell !== null) {
         moved.push(cell);
+      }
+    });
+
+
+    // 4. push() nulls until row has length 4 again
+    while (moved.length < 4) {
+      moved.push(null);
     }
-});
-    //4. push() nulls until row has length 4 again
-        while (moved.length < 4) {
-        moved.push(null);
+
+    updatedBoard.push(moved);
+  });
+
+  this.board = updatedBoard;
+};
+
+
+Game2048.prototype.moveRight = function () {
+  var updatedBoard = [];
+
+  this.board.forEach(function (row) {
+    // 1. Remove empties from row
+    var newRow = [];
+
+    row.forEach(function (cell) {
+      if (cell !== null) {
+        newRow.push(cell);
+      }
+    });
+
+    // 2. Merge tiles in row that are together and the same number
+    for (var i = (newRow.length - 1); i >= 0; i -= 1) {
+      if (newRow[i] === newRow[i - 1]) {
+        newRow[i] *= 2;
+        newRow[i - 1] = null;
+      }
     }
- });
+
+    // 3. Remove new empties in the middle
+    //     e.g. when step #2 turns [8, 8, 4] into [16, null, 4]
+    //          we want to end up with [16, 4]
+    var moved = [];
+
+    newRow.forEach(function (cell) {
+      if (cell !== null) {
+        moved.push(cell);
+      }
+    });
+
+
+    // 4. push() nulls until row has length 4 again
+    while (moved.length < 4) {
+      moved.unshift(null);
+    }
+
+    updatedBoard.push(moved);
+  });
+
+  this.board = updatedBoard;
 };
