@@ -68,7 +68,7 @@ function checkIfDone () {
   }
 
   else if (myGlobalGame.hasLost) {
-    ion.sound.play('beer_can_opening')
+    ion.sound.play('beer_can_opening');
     $('#game-board').remove();
     var loserHtml = '<img src="https://media.giphy.com/media/l3q2K12v7LgvwlATC/giphy.gif" alt="Loser">';
     $('body').append(loserHtml);
